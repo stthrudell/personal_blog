@@ -20,18 +20,9 @@ class CategoryController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-  }
+    const categories = await Category.all()
 
-  /**
-   * Render a form to be used for creating a new category.
-   * GET categories/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+    return categories
   }
 
   /**
@@ -43,8 +34,24 @@ class CategoryController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    const data = request.only(['title'])
+    let { slug, ...data} = request.only(['title', 'slug'])
+    
+    
+    if(typeof slug === 'undefined') {
+      slug = data.title.normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/([^\w]+|\s+)/g, '_')
+      .replace(' ', '_')
+      .replace(/(^_+|_+$)/, '').toLowerCase() 
+    } else {
+      slug = slug.normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/([^\w]+|\s+)/g, '_')
+      .replace(' ', '_')
+      .replace(/(^_+|_+$)/, '').toLowerCase()
+    }
 
+    data['slug'] = slug
     const category = await Category.create(data)
 
     return category
@@ -60,19 +67,12 @@ class CategoryController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+  
+    const category = await Category.findByOrFail('slug', params.id)
+    const posts = category.posts().fetch() 
+    return posts
   }
 
-  /**
-   * Render a form to update an existing category.
-   * GET categories/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
 
   /**
    * Update category details.
@@ -83,6 +83,8 @@ class CategoryController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+
+    
   }
 
   /**
@@ -93,7 +95,10 @@ class CategoryController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ auth, params, request, response }) {
+    const category = await Category.findOrFail(params.id)
+
+    await category.delete()
   }
 }
 

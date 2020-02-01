@@ -32,4 +32,7 @@ Route.resource('posts', 'PostController')
   .apiOnly()
   .middleware('auth')
 
-Route.post('/categories', 'CategoryController.store')
+
+Route.resource('categories', 'CategoryController')
+  .apiOnly()
+  .middleware('auth')
