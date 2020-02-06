@@ -1,0 +1,23 @@
+header { 
+    height: 55px;    
+    border-bottom: 1px solid #f1f1f1;
+    margin-bottom: 100px;
+}
+
+header nav {
+    margin: 0 auto;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+header .logo {
+    width: 200px;
+    position: relative;
+    top: 15px;
+}
+
+header .logo img {
+    width: 100%;
+}
