@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-// import { Container } from './styles';
+import { FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa";
+
 
 
 import Logo from "../../assets/logo.png";
@@ -42,7 +43,11 @@ export default class header extends Component {
                         </div>
                     </nav>
                 </div>
-                <div className="social-icons">icons</div>
+                <div className="social-icons">
+                    <a href="#"><FaFacebookF /></a>
+                    <a href="#"><FaInstagram /></a>
+                    <a href="#"><FaGithub /></a>
+                </div>
             </nav>
         </header>
     );
